@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class Books {
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
@@ -20,6 +21,7 @@ public class Books {
 	private String book_Name;
 	private String author;
 	private int stock;
+	//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(joinColumns = @JoinColumn,inverseJoinColumns = @JoinColumn)

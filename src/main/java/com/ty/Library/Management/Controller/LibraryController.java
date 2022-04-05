@@ -26,25 +26,30 @@ import io.swagger.annotations.ApiResponses;
 public class LibraryController {
 	@Autowired
 	LibraryService service;
+
 	@PostMapping("books")
-	public ResponseEntity<ResponseStructure<Books>> saveBooks(@RequestBody  Books book){
+	public ResponseEntity<ResponseStructure<Books>> saveBooks(@RequestBody Books book) {
 		return service.saveLibrary(book);
 	}
 
 	@PostMapping("book")
-	@ApiOperation("To save User") 
+	@ApiOperation("To save User")
 	@ApiResponses({ @ApiResponse(code = 200, message = "user saved"),
 			@ApiResponse(code = 404, message = "Class not found"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
 	public ResponseEntity<ResponseStructure<Books>> save(@RequestBody Books book) {
-		
+
 		return service.saveLibrary(book);
 	}
 
 	@GetMapping("book")
+
 	@ApiOperation("To Get all the User")
+
 	@ApiResponses({ @ApiResponse(code = 200, message = "User Found"),
+
 			@ApiResponse(code = 404, message = "Class not found"),
+
 			@ApiResponse(code = 500, message = "Internal Server error") })
 	public ResponseEntity<ResponseStructure<List<Books>>> get() {
 
@@ -56,7 +61,7 @@ public class LibraryController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "User updated"),
 			@ApiResponse(code = 404, message = "Class not found"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
-	public ResponseEntity<ResponseStructure<Books>> update(@RequestParam int id, @RequestBody  Books book ) {
+	public ResponseEntity<ResponseStructure<Books>> update(@RequestParam int id, @RequestBody Books book) {
 		return service.updateLibrary(id, book);
 
 	}
@@ -70,13 +75,18 @@ public class LibraryController {
 		return service.getLibraryById(id);
 	}
 
-	@DeleteMapping("book")
-	@ApiOperation("To delete the User")
-	@ApiResponses({ @ApiResponse(code = 200, message = "User deleted"),
-			@ApiResponse(code = 404, message = "Class not found"),
-			@ApiResponse(code = 500, message = "Internal Server error") })
-	public ResponseEntity<ResponseStructure<String>> deleteUser(@RequestParam int id) {
-		return service.deleteLibrary(id);
-	}
-	
+	/*
+	 * @DeleteMapping("book")
+	 * 
+	 * @ApiOperation("To delete the User")
+	 * 
+	 * @ApiResponses({ @ApiResponse(code = 200, message = "User deleted"),
+	 * 
+	 * @ApiResponse(code = 404, message = "Class not found"),
+	 * 
+	 * @ApiResponse(code = 500, message = "Internal Server error") }) public
+	 * ResponseEntity<ResponseStructure<String>> deleteUser(@RequestParam int id) {
+	 * return service.deleteLibrary(id); }
+	 */
+
 }

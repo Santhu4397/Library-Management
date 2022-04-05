@@ -18,7 +18,9 @@ public interface UserService {
 
 	public ResponseEntity<ResponseStructure<User>> getUserById(int id);
 
-	public ResponseEntity<ResponseStructure<User>> updateUser(int id, User user);
+	public ResponseEntity<ResponseStructure<User>> updateUser(int id, User user,int bookid);
 
 	public ResponseEntity<ResponseStructure<String>> deleteUser(int id);
+
+	ResponseEntity<ResponseStructure<User>> updateUser2(int id, User user, int bookid);
 }

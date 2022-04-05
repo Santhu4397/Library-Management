@@ -7,5 +7,7 @@ import com.ty.Library.Management.dto.User;
 
 public interface Userrepo extends JpaRepository<User, Integer>{
 
+	
+
 
 }

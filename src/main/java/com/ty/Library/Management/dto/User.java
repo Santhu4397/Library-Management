@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +23,9 @@ public class User {
 	private int no_returned_book;
 	private LocalDate borrowed_Date;
 	private LocalDate returned_Date;
-	@JsonIgnore  
-	@ManyToMany(mappedBy = "user")
+	//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonIgnore
+	@ManyToMany(mappedBy = "user",fetch = FetchType.EAGER)
 	private List<Books> libraryDB;
 	
 	

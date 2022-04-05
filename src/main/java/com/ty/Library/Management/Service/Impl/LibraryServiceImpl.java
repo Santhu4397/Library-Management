@@ -20,7 +20,7 @@ public class LibraryServiceImpl implements LibraryService{
 	@Override
 	public ResponseEntity<ResponseStructure<Books>> saveLibrary(Books library) {
 		List<Books> list=null;
-		ResponseStructure<Books> structure = new ResponseStructure<>();
+		ResponseStructure<Books> structure = new ResponseStructure<Books>();
 		structure.setStatus(HttpStatus.OK.value());
 		structure.setMessage("Sucess");
 		if(list==null) {
@@ -36,16 +36,28 @@ public class LibraryServiceImpl implements LibraryService{
 	}
 	@Override
 	public ResponseEntity<ResponseStructure<List<Books>>> getAll() {
+		List<Books> books =dao.getAllLibrary();
+		ResponseEntity<ResponseStructure<List<Books>>> responseEntity=null;
 		ResponseStructure<List<Books>> Structure=new ResponseStructure<List<Books>>();
+		if(books !=null) {
+		
 		Structure.setStatus(HttpStatus.OK.value());
 		Structure.setMessage("sucess");
 		Structure.setData(dao.getAllLibrary());
-		ResponseEntity<ResponseStructure<List<Books>>> responseEntity=new ResponseEntity<ResponseStructure<List<Books>>>(Structure, HttpStatus.OK);
+		responseEntity=new ResponseEntity<ResponseStructure<List<Books>>>(Structure, HttpStatus.OK);
 			return responseEntity;
+		}else {
+			Structure.setStatus(HttpStatus.NOT_FOUND.value());
+			Structure.setMessage("No Books found");
+			Structure.setData(null);
+			responseEntity=new ResponseEntity<ResponseStructure<List<Books>>>(Structure, HttpStatus.NOT_FOUND);
+				return responseEntity;
+
+		}
 	}
 	@Override
 	public ResponseEntity<ResponseStructure<Books>> getLibraryById(int id) {
-		ResponseStructure<Books> structure = null ;
+		ResponseStructure<Books> structure = new ResponseStructure<Books>() ;
 		Books db=dao.getLibraryById(id);
 		if(db !=null) {
 			structure.setStatus(HttpStatus.OK.value());
@@ -66,7 +78,7 @@ public class LibraryServiceImpl implements LibraryService{
 			}
 	@Override
 	public ResponseEntity<ResponseStructure<Books>> updateLibrary(int id, Books library) {
-		ResponseStructure<Books> structure = null ;
+		ResponseStructure<Books> structure = new ResponseStructure<Books>()  ;
 		Books exisitinglib=dao.getLibraryById(id);
 		if(exisitinglib !=null) {
 			structure.setStatus(HttpStatus.OK.value());
@@ -87,7 +99,7 @@ public class LibraryServiceImpl implements LibraryService{
 	}
 	@Override
 	public ResponseEntity<ResponseStructure<String>> deleteLibrary(int id) {
-		ResponseStructure<String> structure = null ;
+		ResponseStructure<String> structure = new ResponseStructure<String>()  ;
 		boolean userremoved=dao.deleteLibrary(id);
 		if(userremoved ==true) {
 			structure.setStatus(HttpStatus.OK.value());

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ty.Library.Management.Service.LibraryService;
 import com.ty.Library.Management.Service.UserService;
+import com.ty.Library.Management.dto.Books;
 import com.ty.Library.Management.dto.User;
 import com.ty.Library.Management.util.ResponseStructure;
 import io.swagger.annotations.ApiOperation;
@@ -24,16 +26,18 @@ import io.swagger.annotations.ApiResponses;
 public class UserController {
 	@Autowired
 	UserService service;
-	
+
+	@Autowired
+	LibraryService bookservice;
 
 	@PostMapping("User/BookID/{bookid}")
 	@ApiOperation("To save User")
 	@ApiResponses({ @ApiResponse(code = 200, message = "user saved"),
 			@ApiResponse(code = 404, message = "Class not found"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
-	public ResponseEntity<ResponseStructure<User>> save(@RequestBody User user,@PathVariable int bookid) {
-		System.out.println(user+"hdgfhgshdj"+bookid);
-		return service.saveUser(user,bookid);
+	public ResponseEntity<ResponseStructure<User>> save(@RequestBody User user, @PathVariable int bookid) {
+		System.out.println(user + "hdgfhgshdj" + bookid);
+		return service.saveUser(user, bookid);
 	}
 
 	@GetMapping("User")
@@ -46,13 +50,13 @@ public class UserController {
 		return service.getAll();
 	}
 
-	@PutMapping("User")
+	@PutMapping("User/bookid/{bookid}")
 	@ApiOperation("To update the User")
 	@ApiResponses({ @ApiResponse(code = 200, message = "User updated"),
 			@ApiResponse(code = 404, message = "Class not found"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
-	public ResponseEntity<ResponseStructure<User>> update(@RequestParam int id, @RequestBody  User user ) {
-		return service.updateUser(id, user);
+	public ResponseEntity<ResponseStructure<User>> update(@RequestParam int id, @RequestBody User user,@PathVariable int bookid) {
+		return service.updateUser2(id, user,bookid);
 
 	}
 
@@ -62,7 +66,22 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Class not found"),
 			@ApiResponse(code = 500, message = "Internal Server error") })
 	public ResponseEntity<ResponseStructure<User>> getUserById(@PathVariable("UserId") int id) {
+		System.out.println(id+"nothinf ");
 		return service.getUserById(id);
+	}
+
+	@GetMapping("user/book")
+
+	@ApiOperation("To Get all the User")
+
+	@ApiResponses({ @ApiResponse(code = 200, message = "User Found"),
+
+			@ApiResponse(code = 404, message = "Class not found"),
+
+			@ApiResponse(code = 500, message = "Internal Server error") })
+	public ResponseEntity<ResponseStructure<List<Books>>> getbooks() {
+
+		return bookservice.getAll();
 	}
 
 	@DeleteMapping("User")
@@ -73,9 +92,10 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<String>> deleteUser(@RequestParam int id) {
 		return service.deleteUser(id);
 	}
+
 	@GetMapping("")
 	public User getm() {
 		return new User();
-		
+
 	}
 }

@@ -13,6 +13,7 @@ import com.ty.Library.Management.Dao.UserDao;
 import com.ty.Library.Management.Service.UserService;
 import com.ty.Library.Management.dto.Books;
 import com.ty.Library.Management.dto.User;
+import com.ty.Library.Management.repository.Libraryrepo;
 import com.ty.Library.Management.util.ResponseStructure;
 
 @Service
@@ -32,9 +33,7 @@ public class UserServiceimpl implements UserService {
 		if (users == null) {
 			users = new ArrayList<User>();
 			Books book = libraryDao.getLibraryById(bookid);
-			System.out.println(book);
 			if (books == null && book != null) {
-				System.out.println("ghjjjjj");
 				books = new ArrayList<Books>();
 				books.add(book);
 				user.setLibraryDB(books);
@@ -61,7 +60,8 @@ public class UserServiceimpl implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> getUserById(int id) {
-		ResponseStructure<User> structure = null;
+
+		ResponseStructure<User> structure = new ResponseStructure<User>();
 		User user = dao.getUserById(id);
 		if (user != null) {
 			structure.setStatus(HttpStatus.OK.value());
@@ -69,6 +69,8 @@ public class UserServiceimpl implements UserService {
 			structure.setData(dao.getUserById(id));
 			ResponseEntity<ResponseStructure<User>> responseEntity = new ResponseEntity<ResponseStructure<User>>(
 					structure, HttpStatus.OK);
+
+			System.out.println(id + " kt " + structure);
 			return responseEntity;
 		} else {
 			structure.setStatus(HttpStatus.OK.value());
@@ -82,13 +84,27 @@ public class UserServiceimpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<User>> updateUser(int id, User user) {
-		ResponseStructure<User> structure = null;
+	public ResponseEntity<ResponseStructure<User>> updateUser(int id, User user,int bookid) {
+		List<User> users = null;
+		List<Books> books = null;
+		ResponseStructure<User> structure = new ResponseStructure<User>();
 		User exisitinguser = dao.getUserById(id);
 		if (exisitinguser != null) {
+			System.out.println(structure);
 			structure.setStatus(HttpStatus.OK.value());
 			structure.setMessage("Sucess");
-			structure.setData(dao.updateUser(id, user));
+			if (users == null) {
+				users = new ArrayList<User>();
+				Books book = libraryDao.getLibraryById(bookid);
+				if (books == null && book != null) {
+					books = new ArrayList<Books>();
+					books.add(book);
+					user.setLibraryDB(books);
+					users.add(user);
+					book.setUser(users);
+				}
+			}
+			structure.setData(dao.updateUser(id, users));
 			ResponseEntity<ResponseStructure<User>> responseEntity = new ResponseEntity<ResponseStructure<User>>(
 					structure, HttpStatus.OK);
 			return responseEntity;
@@ -101,10 +117,43 @@ public class UserServiceimpl implements UserService {
 			return responseEntity;
 		}
 	}
+	@Autowired
+	Libraryrepo libraryrepo;
+	
+	@Override
+	public ResponseEntity<ResponseStructure<User>> updateUser2(int id, User user,int bookid) {
+		User user2 = dao.getUserById(id);
+		if(user2!=null) {
+			Books books = libraryDao.getLibraryById(bookid);
+			List<Books> books2 = user2.getLibraryDB();
+			books2.add(books);
+			user2.setLibraryDB(books2);
+			List<User> users = books.getUser();
+			for (User user3 : users) {
+				user3.getLibraryDB().add(books);
+				dao.updateUser2(user3);
+				
+			}
+			
+		}
+		
+		ResponseStructure<User> structure = new ResponseStructure<User>();
+		structure.setStatus(HttpStatus.OK.value());
+		structure.setMessage("Sucess");
+		structure.setData(dao.updateUser2(user2));
+		ResponseEntity<ResponseStructure<User>> responseEntity = new ResponseEntity<ResponseStructure<User>>(
+				structure, HttpStatus.OK);
+		List<Books> books = user2.getLibraryDB();
+		for (Books books2 : books) {
+			System.out.println(books2.getBook_Name()+"        ===========================================");
+			
+		}
+		return responseEntity;
+	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<String>> deleteUser(int id) {
-		ResponseStructure<String> structure = null;
+		ResponseStructure<String> structure = new ResponseStructure<String>();
 		boolean userremoved = dao.deleteUser(id);
 		if (userremoved == true) {
 			structure.setStatus(HttpStatus.OK.value());
